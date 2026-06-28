@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 🔒 Report a security vulnerability
+    url: https://github.com/QNSC-VN/.github/security/policy
+    about: Please report security issues privately, not as a public issue.
+  - name: 💬 Questions & discussion
+    url: https://qnsc.vn
+    about: For general questions, reach out to the QNSC team.

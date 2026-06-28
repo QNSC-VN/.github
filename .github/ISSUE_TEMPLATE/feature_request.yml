@@ -1,0 +1,45 @@
+name: ✨ Feature Request
+description: Suggest a new feature or improvement for the QNSC platform
+title: "[Feature]: "
+labels: ["enhancement", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the suggestion! Please describe the problem you're trying to solve so we
+        can evaluate the best approach.
+  - type: input
+    id: component
+    attributes:
+      label: Target component / repository
+      placeholder: e.g. rally-web, opshub-api
+    validations:
+      required: false
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve?
+      description: Describe the pain point or use case. Focus on the "why".
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed solution
+      description: What would you like to see happen?
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Any other approaches you've thought about?
+    validations:
+      required: false
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Mockups, links, or anything else that helps.
+    validations:
+      required: false
