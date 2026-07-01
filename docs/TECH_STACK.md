@@ -22,7 +22,7 @@
 | Layer | Choice | Rejected alternative(s) | Why |
 |---|---|---|---|
 | **IaC / provisioning** | **OpenTofu** | Terraform (licensing), Pulumi, CDK | Already in use; open-source; existing module library + state backend. |
-| **Landing zone** | **AWS Control Tower** baseline + OpenTofu resources | Pure-OpenTofu landing zone | CT provides log-archive/audit accounts + guardrails out of the box (saves months); OpenTofu vends workload accounts and all resources. |
+| **Landing zone** | **OpenTofu-native** (Org + OUs + accounts + SCPs + security baseline) | AWS Control Tower + AFT | 100% GitOps/IaC, no console ClickOps, no CT lock-in — right-sized for the current stage. Graduate to Control Tower if audit/scale later justifies its turnkey guardrails. See §9 ADR-26. |
 | **Container orchestration** | **ECS Fargate now → Amazon EKS when triggered** | self-managed k8s; full-serverless | ECS Fargate is right for the current stage (no control-plane fee/ops); EKS is trigger-driven. See architecture §8 & §13.2. |
 | **EKS provisioning** | OpenTofu + **terraform-aws-eks** module | Hand-rolled cluster, eksctl | Community standard; do not hand-roll. |
 | **GitOps / CD** | **ArgoCD** (app-of-apps + ApplicationSets) | Flux | Stronger multi-tenancy + UI for many products/teams. |
@@ -198,6 +198,7 @@ Adopt only when a concrete need appears:
 | ADR-23 | EKS adoption is **trigger-gated** (team hired · Zone C real · >~15–20 services · Fargate cost high + util low · mesh/GPU/KEDA · GovCloud portability), not calendar-scheduled | Avoid paying the EKS ops/people cost before scale justifies it; Zone C is the likely forcing function | Accepted |
 | ADR-24 | **Lambda for event-driven glue only** (cron, dev-scheduler, webhooks, light async); no full-serverless primary runtime | Full-serverless is a different architecture, not a step toward EKS; cold-start/15-min/VPC-latency hurt always-on SaaS | Accepted |
 | ADR-25 | ECS deploy: CI push (`update-service` / CodeDeploy blue-green); supply-chain verify enforced **in-pipeline** (no admission controller pre-K8s) | Fast rollback, zero-downtime; keeps the sign→verify loop closed without ArgoCD/Kyverno | Accepted |
+| ADR-26 | Landing zone is **OpenTofu-native** (Org/OUs/accounts/SCPs/security baseline in code), not AWS Control Tower | 100% GitOps, no console ClickOps, no CT lock-in; right-sized for an 8-person, dev-stage team. Revisit CT at audit/production scale. Supersedes the earlier CT choice | **Accepted 2026-07-01** |
 
 ---
 
