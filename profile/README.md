@@ -50,7 +50,7 @@ for our own teams — not our silicon IP, which lives elsewhere.
 | :------ | :--------- |
 | **Rally** | Internal work-management platform — an Agile project & portfolio tracker (modeled on Broadcom Rally) for planning chip-design and software delivery. `rally-web` · `rally-api` · `rally-infra` |
 | **OpsHub** | Internal operations & DevOps tooling for the platform team. `opshub-web` · `opshub-api` · `opshub-infra` |
-| **Infra / GitOps** | Shared infrastructure-as-code and GitOps delivery. `qnsc-infra` · `qnsc-gitops` |
+| **Infra / GitOps** | Shared infrastructure-as-code and GitOps delivery. `qnsc-infra` · `qnsc-ci` |
 
 ### On the roadmap
 - 📚 **Knowledge Base** — an enterprise-grade knowledge platform for our teams and customers
