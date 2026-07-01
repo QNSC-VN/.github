@@ -188,7 +188,7 @@ Adopt only when a concrete need appears:
 | ADR-13 | PostgreSQL everywhere — Aurora for SaaS, RDS for internal, pgvector for AI | RLS multi-tenancy, JSONB, vectors; no separate vector DB yet | Accepted |
 | ADR-14 | S3 is the default object store; R2 only for heavy-egress public assets | R2 is a CDN-origin egress play, not a durable AWS-integrated store | Accepted |
 | ADR-15 | SQS + EventBridge + SNS backbone; BullMQ/Celery for in-app jobs; no RabbitMQ; defer Kafka | Managed zero-ops backbone; streaming only when real | Accepted |
-| ADR-16 | Workforce identity: IAM Identity Center federated to corporate IdP (Entra ID/Okta); no IAM users; MFA mandatory | One identity → AWS + EKS RBAC + ArgoCD + Grafana | Accepted |
+| ADR-16 | Workforce identity: IAM Identity Center federated to **Microsoft Entra ID** (M365 tenant, confirmed); no IAM users; MFA mandatory | Company already has M365 licenses → Entra ID is the IdP; Okta option dropped | **Confirmed 2026-07-01** |
 | ADR-17 | Customer identity: WorkOS (B2B SSO/SCIM) preferred; Cognito if cost-first | Enterprise/hospital customers require SAML/OIDC + SCIM | Accepted, vendor TBD |
 | ADR-18 | CI supply chain to SLSA L3: sign + verify-at-admission, SAST/IaC/container scan, SBOM, SHA-pinned actions, prod approval gates | Close the supply-chain loop; least-privilege CI | Accepted |
 | ADR-19 | Observability: AMP + AMG + Fluent Bit→CloudWatch (→Loki) + OTel→X-Ray; SLOs; PagerDuty | Managed-first; control cardinality + log volume | Accepted |
@@ -199,6 +199,7 @@ Adopt only when a concrete need appears:
 | ADR-24 | **Lambda for event-driven glue only** (cron, dev-scheduler, webhooks, light async); no full-serverless primary runtime | Full-serverless is a different architecture, not a step toward EKS; cold-start/15-min/VPC-latency hurt always-on SaaS | Accepted |
 | ADR-25 | ECS deploy: CI push (`update-service` / CodeDeploy blue-green); supply-chain verify enforced **in-pipeline** (no admission controller pre-K8s) | Fast rollback, zero-downtime; keeps the sign→verify loop closed without ArgoCD/Kyverno | Accepted |
 | ADR-26 | Landing zone is **OpenTofu-native** (Org/OUs/accounts/SCPs/security baseline in code), not AWS Control Tower | 100% GitOps, no console ClickOps, no CT lock-in; right-sized for an 8-person, dev-stage team. Revisit CT at audit/production scale. Supersedes the earlier CT choice | **Accepted 2026-07-01** |
+| ADR-27 | **Entra ID → IAM Identity Center via SAML + SCIM** (not Okta, not built-in directory); permission sets in OpenTofu; account assignments after SCIM sync; Entra app registration is a one-time manual step | Company holds M365 licenses — Entra ID is already the corporate IdP; SAML federation + SCIM provisioning gives SSO + auto-deprovisioning with no extra vendor spend | **Accepted 2026-07-01** |
 
 ---
 
@@ -253,7 +254,7 @@ Three distinct layers — do not conflate them.
 
 | Decision | Choice |
 |---|---|
-| Hub | **AWS IAM Identity Center (SSO)**, federated to the corporate IdP (**Entra ID / Okta**) |
+| Hub | **AWS IAM Identity Center (SSO)**, federated to **Microsoft Entra ID** (M365 tenant) via SAML 2.0 + SCIM |
 | Propagation | SSO groups → AWS permission sets **+** EKS access entries / RBAC (group → ClusterRole) **+** ArgoCD RBAC (OIDC) **+** Grafana (OIDC) |
 | Rules | MFA mandatory · **no IAM users** · root locked with hardware MFA · break-glass role audited |
 
